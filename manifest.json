@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Tab Double-Click Grouper",
+  "name": "Tab Grouper",
   "version": "1.0",
-  "description": "Double-click a tab to move it into a new group.",
+  "description": "Group tabs into a new group with a simple click/shortcut.",
   "permissions": ["tabs", "tabGroups"],
   "background": {
     "service_worker": "background.js"
