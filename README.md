@@ -19,7 +19,7 @@ A simple Chrome extension that automatically groups your tabs based on custom ru
 ### Step-by-Step Instructions
 
 1. **Download the Extension Files**
-   - Click the green **Code** button on this page and choose **Download ZIP**.
+   - Click the blue **Code** button on this page and choose **Download ZIP**.
    - Unzip the downloaded file to a folder on your computer (for example, your Desktop).
 
 2. **Open Chrome Extensions Page**
