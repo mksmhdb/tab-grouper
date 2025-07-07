@@ -33,7 +33,10 @@ function checkAndGroupTab(tab) {
   chrome.storage.sync.get({ rules: [] }, (data) => {
     const rules = data.rules || [];
     for (const rule of rules) {
-      if (rule.type === 'title_contains' && tab.title.includes(rule.value)) {
+      if (
+        (rule.type === 'title_contains' && tab.title.includes(rule.value)) ||
+        (rule.type === 'url_contains' && tab.url && tab.url.includes(rule.value))
+      ) {
         // If groupName is empty, always create a new group for this tab
         groupTabWithRule(tab.id, rule.groupName, rule.groupColor);
         break;
