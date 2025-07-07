@@ -1,11 +1,14 @@
+// Defensive check: Ensure this script is running in the Chrome extension context
 if (!chrome || !chrome.storage || !chrome.storage.sync) {
   alert('Please open this page from the Chrome Extensions page (chrome://extensions > Details > Extension options).');
   throw new Error('chrome.storage.sync is not available.');
 }
 
+// Get references to the form and rules list elements
 const ruleForm = document.getElementById('rule-form');
 const rulesList = document.getElementById('rules-list');
 
+// Render the list of rules in the UI
 function renderRules(rules) {
   rulesList.innerHTML = '';
   rules.forEach((rule, idx) => {
@@ -16,6 +19,7 @@ function renderRules(rules) {
       <span class="delete-btn" data-idx="${idx}">Delete</span><br>
       Group: <b>${rule.groupName ? rule.groupName : '(no name)'}</b> (<span style="color:${rule.groupColor}">${rule.groupColor}</span>)
     `;
+    // Delete button handler
     div.querySelector('.delete-btn').onclick = (e) => {
       rules.splice(idx, 1);
       saveRules(rules);
@@ -24,18 +28,21 @@ function renderRules(rules) {
   });
 }
 
+// Save the rules array to chrome.storage.sync
 function saveRules(rules) {
   chrome.storage.sync.set({ rules }, () => {
     renderRules(rules);
   });
 }
 
+// Load rules from chrome.storage.sync and render them
 function loadRules() {
   chrome.storage.sync.get({ rules: [] }, (data) => {
     renderRules(data.rules || []);
   });
 }
 
+// Handle form submission to add a new rule
 ruleForm.onsubmit = (e) => {
   e.preventDefault();
   const type = document.getElementById('rule-type').value;
@@ -51,4 +58,5 @@ ruleForm.onsubmit = (e) => {
   });
 };
 
+// Initial load of rules when the page is opened
 loadRules(); 
