@@ -1,13 +1,4 @@
 // Sample rule for testing (will be managed by UI later)
-const DEFAULT_RULES = [
-  {
-    type: 'title_contains',
-    value: 'Docs',
-    groupName: 'Documentation',
-    groupColor: 'blue'
-  }
-];
-
 const COLORS = [
   'grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'
 ];
@@ -36,7 +27,7 @@ function checkAndGroupTab(tab) {
     console.error('chrome.storage.sync is not available in this context.');
     return;
   }
-  chrome.storage.sync.get({ rules: DEFAULT_RULES }, (data) => {
+  chrome.storage.sync.get({ rules: [] }, (data) => {
     const rules = data.rules || [];
     for (const rule of rules) {
       if (rule.type === 'title_contains' && tab.title.includes(rule.value)) {
