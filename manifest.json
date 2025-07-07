@@ -24,5 +24,6 @@
       },
       "description": "Group the current tab into a new group"
     }
-  }
+  },
+  "options_page": "options.html"
 } 
