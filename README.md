@@ -12,7 +12,7 @@ A simple Chrome extension that automatically groups your tabs based on custom ru
   - Manage rules from the popup (click the extension icon) or the options page (`chrome://extensions > Details > Extension options`)
 - **Modern UI:** Clean, simple popup and options page for rule management.
 
-## How to Install (for Non-Technical Users)
+## How to Install
 
 > **Note:** This extension is not available in the Chrome Web Store. You will need to install it manually. No coding is required!
 
