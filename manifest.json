@@ -3,19 +3,14 @@
   "name": "Tab Grouper",
   "version": "1.0",
   "description": "Group tabs into a new group with a simple click/shortcut.",
-  "permissions": ["tabs", "tabGroups"],
+  "permissions": ["tabs", "tabGroups", "storage"],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_title": "Group this tab"
+    "default_title": "Group this tab",
+    "default_popup": "popup.html"
   },
   "commands": {
     "group-tab": {

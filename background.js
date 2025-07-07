@@ -8,25 +8,39 @@ const DEFAULT_RULES = [
   }
 ];
 
+const COLORS = [
+  'grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'
+];
+
+function getRandomColor() {
+  return COLORS[Math.floor(Math.random() * COLORS.length)];
+}
+
 function groupTabWithRule(tabId, groupName, groupColor) {
   chrome.tabs.group({ tabIds: [tabId] }, (groupId) => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError);
       return;
     }
+    let color = groupColor === 'random' ? getRandomColor() : groupColor;
     chrome.tabGroups.update(groupId, {
-      title: groupName,
-      color: groupColor
+      title: groupName || '',
+      color
     });
   });
 }
 
 function checkAndGroupTab(tab) {
   if (!tab || !tab.id || !tab.title) return;
+  if (!chrome.storage || !chrome.storage.sync) {
+    console.error('chrome.storage.sync is not available in this context.');
+    return;
+  }
   chrome.storage.sync.get({ rules: DEFAULT_RULES }, (data) => {
     const rules = data.rules || [];
     for (const rule of rules) {
       if (rule.type === 'title_contains' && tab.title.includes(rule.value)) {
+        // If groupName is empty, always create a new group for this tab
         groupTabWithRule(tab.id, rule.groupName, rule.groupColor);
         break;
       }
@@ -52,10 +66,7 @@ function groupTab(tabId) {
       console.error(chrome.runtime.lastError);
       return;
     }
-    const colors = [
-      'grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'
-    ];
-    const color = colors[Math.floor(Math.random() * colors.length)];
+    const color = getRandomColor();
     chrome.tabGroups.update(groupId, {
       title: '',
       color

@@ -1,1 +1,0 @@
-// Placeholder content script. No longer used, but required for manifest compatibility. 
