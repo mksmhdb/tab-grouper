@@ -7,6 +7,9 @@ if (!chrome || !chrome.storage || !chrome.storage.sync) {
 // Get references to the form and rules list elements
 const ruleForm = document.getElementById('rule-form');
 const rulesList = document.getElementById('rules-list');
+const submitBtn = ruleForm.querySelector('button[type="submit"]');
+
+let editIndex = null; // Track which rule is being edited
 
 // Render the list of rules in the popup UI
 function renderRules(rules) {
@@ -17,13 +20,23 @@ function renderRules(rules) {
     div.className = 'rule';
     div.innerHTML = `
       <span class="rule-title">${rule.type.replace('_', ' ')}: <b>${rule.value}</b></span>
-      <span class="delete-btn" data-idx="${idx}">Delete</span><br>
+      <span class="delete-btn" data-idx="${idx}">Delete</span>
+      <span class="edit-btn" data-idx="${idx}" style="float:right; color:blue; cursor:pointer; margin-right:10px;">Edit</span><br>
       Group: <b>${rule.groupName ? rule.groupName : '(no name)'}</b> (<span style="color:${rule.groupColor}">${rule.groupColor}</span>)
     `;
     // Delete button handler
     div.querySelector('.delete-btn').onclick = (e) => {
       rules.splice(idx, 1);
       saveRules(rules);
+    };
+    // Edit button handler
+    div.querySelector('.edit-btn').onclick = (e) => {
+      document.getElementById('rule-type').value = rule.type;
+      document.getElementById('rule-value').value = rule.value;
+      document.getElementById('rule-group-name').value = rule.groupName;
+      document.getElementById('rule-group-color').value = rule.groupColor;
+      editIndex = idx;
+      submitBtn.textContent = 'Save';
     };
     rulesList.appendChild(div);
   });
@@ -38,6 +51,10 @@ function saveRules(rules) {
     } else {
       console.log('Rules saved:', rules);
       renderRules(rules);
+      // Reset form after save
+      ruleForm.reset();
+      submitBtn.textContent = 'Add Rule';
+      editIndex = null;
     }
   });
 }
@@ -55,7 +72,7 @@ function loadRules() {
   });
 }
 
-// Handle form submission to add a new rule
+// Handle form submission to add or edit a rule
 ruleForm.onsubmit = (e) => {
   e.preventDefault();
   const type = document.getElementById('rule-type').value;
@@ -65,10 +82,14 @@ ruleForm.onsubmit = (e) => {
   if (!value) return;
   chrome.storage.sync.get({ rules: [] }, (data) => {
     const rules = data.rules || [];
-    rules.push({ type, value, groupName, groupColor });
-    console.log('Adding rule:', { type, value, groupName, groupColor });
+    if (editIndex !== null) {
+      // Edit existing rule
+      rules[editIndex] = { type, value, groupName, groupColor };
+    } else {
+      // Add new rule
+      rules.push({ type, value, groupName, groupColor });
+    }
     saveRules(rules);
-    ruleForm.reset();
   });
 };
 
