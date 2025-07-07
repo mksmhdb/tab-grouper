@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tab Grouper",
   "version": "1.0",
-  "description": "Group tabs into a new group with a simple click/shortcut.",
+  "description": "Automatically group tabs based on rules (e.g., title contains), or group the current tab with a click or shortcut. Manage rules from the popup or options page.",
   "permissions": ["tabs", "tabGroups", "storage"],
   "background": {
     "service_worker": "background.js"
