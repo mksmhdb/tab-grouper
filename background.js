@@ -26,6 +26,8 @@ function groupTabWithRule(tabId, groupName, groupColor) {
 // Checks if a tab matches any rule and groups it if so
 function checkAndGroupTab(tab) {
   if (!tab || !tab.id || !tab.title) return;
+  // Ignore tabs that are already in a group
+  if (typeof tab.groupId !== 'undefined' && tab.groupId !== -1) return;
   if (!chrome.storage || !chrome.storage.sync) {
     console.error('chrome.storage.sync is not available in this context.');
     return;
