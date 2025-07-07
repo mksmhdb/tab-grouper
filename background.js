@@ -25,9 +25,9 @@ function groupTabWithRule(tabId, groupName, groupColor) {
 
 // Checks if a tab matches any rule and groups it if so
 function checkAndGroupTab(tab) {
-  if (!tab || !tab.id || !tab.title) return;
+  if (!tab || !tab.id || !tab.title) { return; }
   // Ignore tabs that are already in a group
-  if (typeof tab.groupId !== 'undefined' && tab.groupId !== -1) return;
+  if (typeof tab.groupId !== 'undefined' && tab.groupId !== -1) { return; }
   if (!chrome.storage || !chrome.storage.sync) {
     console.error('chrome.storage.sync is not available in this context.');
     return;
@@ -56,9 +56,7 @@ chrome.tabs.onCreated.addListener((tab) => {
 
 // Listen for tab updates (e.g., title changes) and check if they should be grouped
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.title) {
-    checkAndGroupTab(tab);
-  }
+  if (changeInfo.title) { checkAndGroupTab(tab); }
 });
 
 // Groups a tab into a new group with a random color and no name (used for manual grouping)
@@ -78,14 +76,10 @@ function groupTab(tabId) {
 
 // Listen for toolbar button clicks to manually group the current tab
 chrome.action.onClicked.addListener((tab) => {
-  if (tab.id) {
-    groupTab(tab.id);
-  }
+  if (tab.id) { groupTab(tab.id); }
 });
 
 // Listen for keyboard shortcut commands to manually group the current tab
 chrome.commands.onCommand.addListener((command, tab) => {
-  if (command === 'group-tab' && tab && tab.id) {
-    groupTab(tab.id);
-  }
+  if (command === 'group-tab' && tab && tab.id) { groupTab(tab.id); }
 }); 

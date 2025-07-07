@@ -4,17 +4,24 @@
   <meta charset="UTF-8">
   <title>Tab Grouper Rules</title>
   <style>
-    body { font-family: sans-serif; max-width: 500px; margin: 2em auto; }
+    body { font-family: sans-serif; margin: 0; padding: 1em; }
+    @media (max-width: 400px) {
+      body { width: 320px; }
+    }
+    @media (min-width: 401px) {
+      body { max-width: 500px; margin: 2em auto; }
+    }
     label { display: block; margin-top: 1em; }
     input, select { width: 100%; padding: 0.5em; margin-top: 0.2em; }
     button { margin-top: 1em; }
     .rule { border: 1px solid #ccc; padding: 1em; margin-top: 1em; border-radius: 5px; }
     .rule-title { font-weight: bold; }
     .delete-btn { float: right; color: red; cursor: pointer; }
+    .edit-btn { float: right; color: blue; cursor: pointer; margin-right: 10px; }
   </style>
 </head>
 <body>
-  <h1>Tab Grouper Rules</h1>
+  <h1 style="margin-top:0;font-size:1.3em">Tab Grouper Rules</h1>
   <form id="rule-form">
     <label>
       Match type
@@ -49,9 +56,9 @@
     <button type="submit">Add Rule</button>
   </form>
 
-  <h2>Existing Rules</h2>
+  <h2 style="font-size:1.1em">Existing Rules</h2>
   <div id="rules-list"></div>
 
-  <script src="options.js"></script>
+  <script src="ui.js"></script>
 </body>
 </html> 

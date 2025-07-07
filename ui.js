@@ -1,6 +1,6 @@
-// Defensive check: Ensure this script is running in the Chrome extension popup context
+// Defensive check: Ensure this script is running in the Chrome extension context
 if (!chrome || !chrome.storage || !chrome.storage.sync) {
-  alert('Please open this popup from the Chrome Extensions toolbar icon. chrome.storage.sync is not available.');
+  alert('Please open this page from the Chrome Extensions toolbar icon or from the Chrome Extensions options page. chrome.storage.sync is not available.');
   throw new Error('chrome.storage.sync is not available.');
 }
 
@@ -11,9 +11,8 @@ const submitBtn = ruleForm.querySelector('button[type="submit"]');
 
 let editIndex = null; // Track which rule is being edited
 
-// Render the list of rules in the popup UI
+// Render the list of rules in the UI
 function renderRules(rules) {
-  console.log('Rendering rules:', rules);
   rulesList.innerHTML = '';
   rules.forEach((rule, idx) => {
     const div = document.createElement('div');
@@ -21,8 +20,8 @@ function renderRules(rules) {
     div.innerHTML = `
       <span class="rule-title">${rule.type.replace('_', ' ')}: <b>${rule.value}</b></span>
       <span class="delete-btn" data-idx="${idx}">Delete</span>
-      <span class="edit-btn" data-idx="${idx}" style="float:right; color:blue; cursor:pointer; margin-right:10px;">Edit</span><br>
-      Group: <b>${rule.groupName ? rule.groupName : '(no name)'}</b> (<span style="color:${rule.groupColor}">${rule.groupColor}</span>)
+      <span class="edit-btn" data-idx="${idx}">Edit</span><br>
+      Group: <b>${rule.groupName || '(no name)'}</b> (<span style="color:${rule.groupColor}">${rule.groupColor}</span>)
     `;
     // Delete button handler
     div.querySelector('.delete-btn').onclick = (e) => {
@@ -45,30 +44,18 @@ function renderRules(rules) {
 // Save the rules array to chrome.storage.sync
 function saveRules(rules) {
   chrome.storage.sync.set({ rules }, () => {
-    if (chrome.runtime.lastError) {
-      alert('Failed to save rules: ' + chrome.runtime.lastError.message);
-      console.error('Failed to save rules:', chrome.runtime.lastError);
-    } else {
-      console.log('Rules saved:', rules);
-      renderRules(rules);
-      // Reset form after save
-      ruleForm.reset();
-      submitBtn.textContent = 'Add Rule';
-      editIndex = null;
-    }
+    renderRules(rules);
+    // Reset form after save
+    ruleForm.reset();
+    submitBtn.textContent = 'Add Rule';
+    editIndex = null;
   });
 }
 
 // Load rules from chrome.storage.sync and render them
 function loadRules() {
   chrome.storage.sync.get({ rules: [] }, (data) => {
-    if (chrome.runtime.lastError) {
-      alert('Failed to load rules: ' + chrome.runtime.lastError.message);
-      console.error('Failed to load rules:', chrome.runtime.lastError);
-    } else {
-      console.log('Rules loaded:', data.rules);
-      renderRules(data.rules || []);
-    }
+    renderRules(data.rules || []);
   });
 }
 
@@ -79,7 +66,7 @@ ruleForm.onsubmit = (e) => {
   const value = document.getElementById('rule-value').value.trim();
   const groupName = document.getElementById('rule-group-name').value.trim();
   const groupColor = document.getElementById('rule-group-color').value;
-  if (!value) return;
+  if (!value) { return; }
   chrome.storage.sync.get({ rules: [] }, (data) => {
     const rules = data.rules || [];
     if (editIndex !== null) {
@@ -93,5 +80,5 @@ ruleForm.onsubmit = (e) => {
   });
 };
 
-// Initial load of rules when the popup is opened
+// Initial load of rules when the page is opened
 loadRules(); 

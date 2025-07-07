@@ -10,7 +10,7 @@
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_title": "Group this tab",
-    "default_popup": "popup.html"
+    "default_popup": "ui.html"
   },
   "commands": {
     "group-tab": {
@@ -20,5 +20,5 @@
       "description": "Group the current tab into a new group"
     }
   },
-  "options_page": "options.html"
+  "options_page": "ui.html"
 } 
